@@ -1,21 +1,35 @@
 'use strict';
-
-let numberOfFilms = +prompt('Сколько фильмов вы уже посмотрели?', '');
+let isCycleEnded;
 
 const personalMovieDB = {
-    count: numberOfFilms,
+    count: 0,
     movies: {},
     actors: {},
     genres: [],
     privat: false,
 };
 
-let lastFilm = prompt('Один из последних просмотренных фильмов?', '');
-let lastFilmRating = +prompt('Как вы его оцените?', '');
+do {
 
-personalMovieDB.movies[lastFilm] = lastFilmRating;
+    let lastFilm = prompt('Один из последних просмотренных фильмов?', '');
+    if (lastFilm.length === 0 || !lastFilm.trim()) {
+        continue;
+    }
+    let lastFilmRating = +prompt('Как вы его оцените?', '');
+
+    personalMovieDB.count += 1;
+
+    personalMovieDB.movies[lastFilm] = lastFilmRating;
+
+    isCycleEnded = confirm("Вы закончили?");
+}
+while (!isCycleEnded);
 
 console.log(personalMovieDB);
+
+
+
+
 
 
 
