@@ -7,4 +7,3 @@ console.log(typeof (null));
 
 
 
-
