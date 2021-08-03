@@ -164,5 +164,5 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // CARDS hmm
+    // CARDS sfs
 });
