@@ -161,4 +161,8 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     window.addEventListener('scroll', showModalByScroll);
+
+
+
+    // CARDS
 });
