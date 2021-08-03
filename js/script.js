@@ -3,6 +3,8 @@ window.addEventListener('DOMContentLoaded', () => {
     const tabsContent = document.querySelectorAll('.tabcontent');
     const tabsParent = document.querySelector('.tabheader__items');
 
+
+
     let activeTab = 0;
 
     (function hideTabContentAndShowOnlyOne() {
@@ -105,4 +107,41 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     setClock('.timer', deadline);
+
+
+
+    // Modal
+
+    const modal = document.querySelector('.modal');
+    const closeModal = document.querySelector('.modal__close');
+
+
+    document.addEventListener('click', (e) => {
+        if (e.target.dataset.modal) {
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+    });
+
+    function hideModalWindow(modalWindow) {
+        modalWindow.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Escape' && modal.classList.contains('show')) {
+            hideModalWindow(modal);
+        }
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            hideModalWindow(e.target);
+        }
+    });
+
+    closeModal.addEventListener('click', () => {
+        hideModalWindow(modal);
+    });
+
 });
