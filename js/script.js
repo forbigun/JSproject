@@ -167,26 +167,31 @@ window.addEventListener('DOMContentLoaded', () => {
     // CARDS sfs
 
     class Card {
-        constructor(title, description, price, currency, image) {
+        constructor(title, description, price, currency, image, ...classes) {
             this.title = title;
             this.description = description;
             this.price = price;
             this.image = image;
             this.currency = currency;
+            this.classes = classes;
         }
 
         setCard(parentSelector) {
             const menuItem = document.createElement('div');
+            if (!this.classes.length) {
+                this.classes = "menu__item";
+                menuItem.classList.add(this.classes);
+            } else {
+                this.classes.forEach(className => menuItem.classList.add(className));
+            }
             menuItem.innerHTML = `
-                <div class="menu__item">
-                    <img src="${this.image}" alt="vegy">
-                        <h3 class="menu__item-subtitle">${this.title}</h3>
-                    <div class="menu__item-descr">${this.description}</div>
-                    <div class="menu__item-divider"></div>
-                    <div class="menu__item-price">
-                        <div class="menu__item-cost">Цена:</div>
-                        <div class="menu__item-total"><span>${this.price}</span> ${this.currency}/день</div>
-                    </div>
+                <img src="${this.image}" alt="vegy">
+                    <h3 class="menu__item-subtitle">${this.title}</h3>
+                <div class="menu__item-descr">${this.description}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${this.price}</span> ${this.currency}/день</div>
                 </div>
             `;
             document.querySelector(parentSelector).append(menuItem);
@@ -194,7 +199,11 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     const card = new Card(
-        'Меню "КЕК"', 'Это кековое меню!', '666', 'руб', 'img/tabs/vegy.jpg'
+        'Меню "КЕК"',
+        'Это кековое меню!',
+        '666',
+        'руб',
+        'img/tabs/vegy.jpg',
     );
     card.setCard('.menu .container');
 });
