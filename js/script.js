@@ -165,4 +165,36 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     // CARDS sfs
+
+    class Card {
+        constructor(title, description, price, currency, image) {
+            this.title = title;
+            this.description = description;
+            this.price = price;
+            this.image = image;
+            this.currency = currency;
+        }
+
+        setCard(parentSelector) {
+            const menuItem = document.createElement('div');
+            menuItem.innerHTML = `
+                <div class="menu__item">
+                    <img src="${this.image}" alt="vegy">
+                        <h3 class="menu__item-subtitle">${this.title}</h3>
+                    <div class="menu__item-descr">${this.description}</div>
+                    <div class="menu__item-divider"></div>
+                    <div class="menu__item-price">
+                        <div class="menu__item-cost">Цена:</div>
+                        <div class="menu__item-total"><span>${this.price}</span> ${this.currency}/день</div>
+                    </div>
+                </div>
+            `;
+            document.querySelector(parentSelector).append(menuItem);
+        }
+    }
+
+    const card = new Card(
+        'Меню "КЕК"', 'Это кековое меню!', '666', 'руб', 'img/tabs/vegy.jpg'
+    );
+    card.setCard('.menu .container');
 });
