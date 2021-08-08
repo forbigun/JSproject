@@ -728,6 +728,11 @@ a {
     animation-duration: 1.5s;
 }
 
+.message {
+    display: block;
+    margin: 0 auto;
+}
+
 @keyframes fade {
     from {
         opacity: 0.1;
