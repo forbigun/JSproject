@@ -206,4 +206,56 @@ window.addEventListener('DOMContentLoaded', () => {
         'img/tabs/vegy.jpg',
     );
     card.setCard('.menu .container');
+
+    // form
+
+    const forms = document.querySelectorAll('form');
+
+    const message = {
+        loading: 'Загрузка',
+        success: 'Спасибо! Мы с Вами связажемся',
+        failure: 'Что-то пошло не так'
+    };
+
+    forms.forEach(i => {
+        postData(i);
+    });
+
+    function postData(form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const statusMessage = document.createElement('div');
+            statusMessage.classList.add('status');
+            statusMessage.textContent = message.loading;
+            form.append(statusMessage);
+
+            const request = new XMLHttpRequest();
+            request.open('POST', 'server.php');
+
+            request.setRequestHeader('Content-type', 'application/json');
+
+            const formData = new FormData(form);
+
+            const object = {};
+            formData.forEach((value, key) => {
+                object[key] = value;
+            });
+
+            request.send(JSON.stringify(object));
+
+            request.addEventListener('load', (event) => {
+                if (event.target.status === 200) {
+                    console.log(event.target.response);
+                    statusMessage.textContent = message.success;
+                    form.reset();
+                    setTimeout(() => {
+                        statusMessage.remove();
+                    }, 3000);
+                } else {
+                    statusMessage.textContent = message.failure;
+                }
+            });
+        });
+    }
 });
