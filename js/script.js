@@ -168,13 +168,22 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // CARDS sfs
 
+    const getResource = async (url) => {
+        const res = await fetch(url);
+        if (!res.ok) {
+            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+        }
+
+        return await res.json();
+    };
+
     class Card {
         constructor(title, description, price, currency, image, ...classes) {
             this.title = title;
             this.description = description;
             this.price = price;
             this.image = image;
-            this.currency = currency;
+            this.currency = currency || 'руб';
             this.classes = classes;
         }
 
@@ -188,7 +197,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }
             menuItem.innerHTML = `
                 <img src="${this.image}" alt="vegy">
-                    <h3 class="menu__item-subtitle">${this.title}</h3>
+                <h3 class="menu__item-subtitle">${this.title}</h3>
                 <div class="menu__item-descr">${this.description}</div>
                 <div class="menu__item-divider"></div>
                 <div class="menu__item-price">
@@ -200,14 +209,13 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const card = new Card(
-        'Меню "КЕК"',
-        'Это кековое меню!',
-        '666',
-        'руб',
-        'img/tabs/vegy.jpg',
-    );
-    card.setCard('.menu .container');
+    getResource('http://localhost:3000/menu')
+        .then(data => {
+            data.forEach(({ title, descr, price, currency, img }) =>
+                new Card(title, descr, price, currency, img)
+                    .setCard('.menu .container'));
+        });
+
 
     // form
 
@@ -220,10 +228,23 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     forms.forEach(i => {
-        postData(i);
+        bindPostData(i);
     });
 
-    function postData(form) {
+    const postData = async (url, data) => {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: data
+        });
+
+        return await res.json();
+    };
+
+
+    function bindPostData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -234,19 +255,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
             const formData = new FormData(form);
 
-            const object = {};
-            formData.forEach((value, key) => {
-                object[key] = value;
-            });
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-            fetch('server.php1', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify(object)
-            })
-                .then(data => data.text())
+            postData('http://localhost:3000/requests', json)
                 .then(data => {
                     console.log(data);
                     showThanksModal(message.success);
