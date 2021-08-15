@@ -1,2 +1,4 @@
 style.css
 node_modules/
+.vscode (1)/
+.jshintrc
